@@ -15,7 +15,6 @@ initAuthStrategies();
 // Auth routes
 router.post("/login", verifyRequiredBody(["email", "password"]), passport.authenticate("login", { failureRedirect: `/login?error=${encodeURI("Usuario y/o clave no válidos.")}` }), async (req, res) => {
     try {
-      console.log(req.user);      
       req.session.user = req.user;
       req.session.save(async (error) => {
         if (error) throw new CustomError(errorDictionary.SESSION_ERROR, `${error}`);
@@ -24,11 +23,11 @@ router.post("/login", verifyRequiredBody(["email", "password"]), passport.authen
       });
     } catch (error) {
       req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-      res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+      res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
     }
   }
 );
-router.post("/register", verifyRequiredBody(["first_name", "last_name", "password", "email", "phoneNumber", "description", "age"]), passport.authenticate("register", { failureRedirect: `/register?error=${encodeURI("Email y/o contraseña no válidos.")}` }), async (req, res) => {
+router.post("/register", verifyRequiredBody(["first_name", "last_name", "password", "email"]), passport.authenticate("register", { failureRedirect: `/register?error=${encodeURI("Email y/o contraseña no válidos.")}` }), async (req, res) => {
     try {
       req.session.user = req.user;    
       req.session.save(async (error) => {
@@ -38,7 +37,7 @@ router.post("/register", verifyRequiredBody(["first_name", "last_name", "passwor
       });
     } catch (error) {
       req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-      res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+      res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
     }
   }
 );
@@ -55,7 +54,7 @@ router.get("/ghlogincallback", passport.authenticate("ghlogin", { failureRedirec
       });
     } catch (error) {
       req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-      res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+      res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
     };
   }
 );
@@ -78,12 +77,13 @@ router.get("/private", handlePolicies(["ADMIN"]), async (req, res) => {
     }
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
   };
 });
 router.get("/logout", async (req, res) => {
   try {
-    const email = req.session.user.email;
+    const email = await req.session.user.email;
+    console.log(email);    
     req.session.destroy(async (error) => {
       if (error) throw new CustomError(errorDictionary.SESSION_ERROR, `${error}`);
       await req.logger.info(`${new Date().toDateString()} Usuario "${email}" cerró sesión; Sesión destruída. ${req.url}`);
@@ -91,7 +91,7 @@ router.get("/logout", async (req, res) => {
     });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/current", async (req, res) => {
@@ -101,7 +101,7 @@ router.get("/current", async (req, res) => {
     res.status(200).send({origin: config.SERVER, payload: myUser });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 export default router;

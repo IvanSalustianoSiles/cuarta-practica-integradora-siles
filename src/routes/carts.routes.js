@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
     res.status(200).send({ origin: config.SERVER, payload: carts });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.post("/", async (req, res) => {
@@ -56,7 +56,7 @@ router.post("/", async (req, res) => {
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/:cid", verifyMDBID(["cid"]), async (req, res) => {
@@ -67,7 +67,7 @@ router.get("/:cid", verifyMDBID(["cid"]), async (req, res) => {
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.post("/:cid/product/:pid", verifyMDBID(["cid", "pid"]), cartPolicies(), async (req, res) => {
@@ -78,7 +78,7 @@ router.post("/:cid/product/:pid", verifyMDBID(["cid", "pid"]), cartPolicies(), a
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.delete("/:cid/product/:pid", verifyMDBID(["cid", "pid"]), cartPolicies(), async (req, res) => {
@@ -89,7 +89,7 @@ router.delete("/:cid/product/:pid", verifyMDBID(["cid", "pid"]), cartPolicies(),
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.put("/:cid", verifyMDBID(["cid"]), async (req, res) => {
@@ -101,7 +101,7 @@ router.put("/:cid", verifyMDBID(["cid"]), async (req, res) => {
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 };
 });
 router.put("/:cid/product/:pid", verifyMDBID(["cid", "pid"]), cartPolicies(), async (req, res) => {
@@ -113,7 +113,7 @@ router.put("/:cid/product/:pid", verifyMDBID(["cid", "pid"]), cartPolicies(), as
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 };
 });
 router.delete("/:cid", verifyMDBID(["cid"]), async (req, res) => {
@@ -125,7 +125,7 @@ router.delete("/:cid", verifyMDBID(["cid"]), async (req, res) => {
     res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 };
 });
 router.get("/:cid/purchase", handlePolicies(["USER"]), verifyMDBID(["cid"]), async (req, res) => {
@@ -192,7 +192,7 @@ router.get("/:cid/purchase", handlePolicies(["USER"]), verifyMDBID(["cid"]), asy
     return res.send({ origin: config.SERVER, payload: `Ticket exitosamente creado. Revise su bandeja de entrada`,  message: fullMessage });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
   }
 });
 

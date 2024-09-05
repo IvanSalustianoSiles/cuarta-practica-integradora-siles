@@ -32,7 +32,7 @@ router.get("/products", async (req, res) => {
     );
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
   }
 });
 router.post("/products", async (req, res) => {
@@ -47,7 +47,7 @@ router.post("/products", async (req, res) => {
       });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/carts/:cid", verifyMDBID(["cid"]), async (req, res) => {
@@ -61,7 +61,7 @@ router.get("/carts/:cid", verifyMDBID(["cid"]), async (req, res) => {
     await UserManager.isRegistered("cart", { toSendObject: toSendObject }, req, res);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/realtimeproducts", async (req, res) => {
@@ -76,7 +76,7 @@ router.get("/realtimeproducts", async (req, res) => {
     );
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.post("/realtimeproducts", uploader.single("archivo"), async (req, res) => {
@@ -117,7 +117,7 @@ router.post("/realtimeproducts", uploader.single("archivo"), async (req, res) =>
     res.render("realTimeProducts", { toSendObject: toSendObject });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/chat", handlePolicies(["USER"]), async (req, res) => {
@@ -125,7 +125,7 @@ router.get("/chat", handlePolicies(["USER"]), async (req, res) => {
     await UserManager.isRegistered("chat", {}, req, res);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/login", async (req, res) => {
@@ -133,7 +133,7 @@ router.get("/login", async (req, res) => {
     !req.session.user ? res.render("login", { postAction: "/api/auth/login", hrefReg: "/register", showError: req.query.error ? true : false, errorMessage: req.query.error }) : res.redirect("/profile");
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/register", (req, res) => {
@@ -143,7 +143,7 @@ router.get("/register", (req, res) => {
     : res.send("Ya has ingresado.");
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/profile", async (req, res) => {
@@ -151,7 +151,7 @@ router.get("/profile", async (req, res) => {
     await UserManager.isRegistered("profile", { user: req.session.user, showWarning: req.query.warning ? true : false, warning: req.query.warning }, req, res);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/mockingproducts", async (req, res) => {
@@ -161,7 +161,7 @@ router.get("/mockingproducts", async (req, res) => {
     return res.send(myProducts);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/loggertest", async (req, res) => {
@@ -180,7 +180,7 @@ router.get("/restore", async (req, res) => {
     res.render("restore", { postAction: "/api/users/restore", showError: req.query.error ? true : false, errorMessage: req.query.error, showOk: req.query.ok ? true : false, okMessage: req.query.ok });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
   }
 });
 router.get("/restorecallback/:code", verifyRestoreCode(), async (req, res) => {
@@ -189,7 +189,7 @@ router.get("/restorecallback/:code", verifyRestoreCode(), async (req, res) => {
     res.render("restorecallback", { ...toSendObject });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
   }
 });
 router.get("/roleChange/:uid", verifyMDBID(["uid"]), handlePolicies(["ADMIN"]), async (req, res) => {
@@ -198,7 +198,7 @@ router.get("/roleChange/:uid", verifyMDBID(["uid"]), handlePolicies(["ADMIN"]), 
     await UserManager.isRegistered("roleChange", { postAction: `/api/users/premium/${uid}` }, req, res);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 export default router;

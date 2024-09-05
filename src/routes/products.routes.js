@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
     res.send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.get("/:pid", handlePolicies(["ADMIN"]), verifyMDBID(["pid"]), async (req, res) => {
@@ -63,7 +63,7 @@ router.get("/:pid", handlePolicies(["ADMIN"]), verifyMDBID(["pid"]), async (req,
       res.status(200).send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.post("/", handlePolicies(["ADMIN", "PREMIUM"]), productPolicies(["ADMIN", "PREMIUM"]), uploader.single("thumbnail"), async (req, res) => {
@@ -78,7 +78,7 @@ router.post("/", handlePolicies(["ADMIN", "PREMIUM"]), productPolicies(["ADMIN",
     res.send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.put("/:pid", handlePolicies(["ADMIN", "PREMIUM"]), productPolicies(["ADMIN", "PREMIUM"]), verifyMDBID(["pid"]), async (req, res) => {
@@ -90,7 +90,7 @@ router.put("/:pid", handlePolicies(["ADMIN", "PREMIUM"]), productPolicies(["ADMI
     res.send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.delete("/:pid", handlePolicies(["ADMIN", "PREMIUM"]), productPolicies(["ADMIN", "PREMIUM"]), verifyMDBID(["pid"]), async (req, res) => {
@@ -102,7 +102,7 @@ router.delete("/:pid", handlePolicies(["ADMIN", "PREMIUM"]), productPolicies(["A
     res.send(toSendObject);
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 catchCall(router, "productos");

@@ -82,7 +82,7 @@ export const verifyRequiredBody = (requiredFields) => {
   
       next();
     } catch (error) {
-      throw new CustomError(errorDictionary.UNHANDLED_ERROR, `${error}`);
+      throw new CustomError(error.type, error.message);
     }
   };
 };

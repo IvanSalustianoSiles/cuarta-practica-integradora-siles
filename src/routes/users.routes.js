@@ -35,7 +35,7 @@ router.post("/", handlePolicies(["ADMIN"]), async (req, res) => {
     res.status(200).send({ status: 1, payload: process });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.put("/:id", handlePolicies(["ADMIN"]), verifyMDBID(["id"]), async (req, res) => {
@@ -48,7 +48,7 @@ router.put("/:id", handlePolicies(["ADMIN"]), verifyMDBID(["id"]), async (req, r
     res.status(200).send({ origin: config.SERVER, payload: process });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.delete("/:id", handlePolicies(["ADMIN"]), verifyMDBID(["id"]), async (req, res) => {
@@ -60,7 +60,7 @@ router.delete("/:id", handlePolicies(["ADMIN"]), verifyMDBID(["id"]), async (req
     res.status(200).send({ origin: config.SERVER, payload: process });
   } catch (error) {
     req.logger.error(`${new Date().toDateString()}; ${error}; ${req.url}`);
-    res.send({ origin: config.SERVER, error: `[ERROR]: ${error}`});
+    res.send({ origin: config.SERVER, status: error.status, type: error.type, message: error.message });
 }
 });
 router.post("/restore", async (req, res) => {

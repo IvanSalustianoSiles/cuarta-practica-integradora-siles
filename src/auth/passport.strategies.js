@@ -48,10 +48,10 @@ const initAuthStrategies = () => {
       async (req, username, password, done) => {
       
         try {
-
+          
           let user = await UserManager.findUserByEmail(username);
           
-          if (user) return done(new CustomError(errorDictionary.AUTHENTICATE_USER_ERROR, "Datos ya ocupados"), false);
+          if (user) return done(new CustomError(errorDictionary.AUTHORIZE_USER_ERROR, "Datos ya ocupados"), false);
           
           const newUser = { ...req.body, password: createHash(password)};
           
@@ -59,7 +59,7 @@ const initAuthStrategies = () => {
           return done(null, result);
           
         } catch (error) {
-          return done(new CustomError(errorDictionary.AUTHORIZE_USER_ERROR, "Error al registrarse."));
+          return error;
         }
       }
     )
